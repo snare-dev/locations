@@ -1,13 +1,17 @@
-import { Link } from "react-router-dom";
 import NavLinks from "./NavLinks";
 import { Button } from "./ui/button";
-
+import DisplayCredits from "./DisplayCredits";
+import Logo from "./Logo";
+import { FaShareAlt } from "react-icons/fa";
+import SearchField from "./SearchField";
+import ShareModal from "./ShareModal";
 
 const Navbar = () => {
 
   const handleShare = () => {
-    console.log("share button clicked!")
-  }
+    document.getElementById("share-modal").showModal();
+  };
+
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
@@ -35,15 +39,28 @@ const Navbar = () => {
               </svg>
             </label>
           </div>
-          <div className="flex-1 px-2 mx-2 tracking-widest font-bold text-2xl">
-            <Link to="/">LOCATIONS</Link>
-          </div>
-          <div className="flex-none hidden lg:block">
-            <ul className="menu menu-horizontal">
+          <Logo />
+          <SearchField />
+          <div className="w-32 md:w-64 mr-4 md:mr-0">
+            <ul className="w-full flex items-center space-x-2 justify-around">
               <li>
-                <Button onClick={handleShare}>Share</Button>
+                <DisplayCredits />
+              </li>
+              <li className="hidden md:block">
+                <Button size={"lg"} onClick={handleShare}>
+                  Share
+                </Button>
+              </li>
+
+              <li className="md:hidden">
+                <FaShareAlt
+                  onClick={handleShare}
+                  className="text-slate-500 hover:cursor-pointer hover:scale-110"
+                  size={26}
+                />
               </li>
             </ul>
+            <ShareModal />
           </div>
         </div>
       </div>
@@ -64,6 +81,6 @@ const Navbar = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Navbar
+export default Navbar;

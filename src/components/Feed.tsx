@@ -1,4 +1,6 @@
+// import { useEffect, useState } from "react";
 import SinglePost from "./SinglePost";
+// import { getPosts } from "@/services/apiCalls";
 
 const data = [
   {
@@ -30,13 +32,22 @@ const data = [
 
 const Feed = () => {
   //usestate for initial data
+  // const [feedData, setFeedData] = useState();
+
   //useeffect for realtime data
+
+  // useEffect(() => {
+  //   const data = getPosts();
+  //   //setFeedData(data);
+  //   setFeedData(data);
+  // }, []);
+
   return (
     <div className="mx-auto p-4">
       <ul>
         {data.map((post) => (
           <li key={post.id}>
-            <SinglePost posts={post} />
+            <SinglePost post={post} />
           </li>
         ))}
       </ul>

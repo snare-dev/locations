@@ -1,22 +1,31 @@
-import React from "react";
+import { initialStateType } from "@/types";
 
 import { Button } from "@/components/ui/button";
+import { useSelector } from "react-redux";
 
 type guessButtonProps = {
-  guess: (arg: number) => void;
-  counterVal: number;
+  guess: () => void;
+  pending: boolean;
+  textData: string;
 };
 
-const GuessButton = ({ guess, counterVal }: guessButtonProps) => {
+const GuessButton = ({ guess, pending, textData }: guessButtonProps) => {
+  const credits = useSelector((state: initialStateType) => state.credits);
   const handleClick = () => {
     console.log("Guess button clicked");
-    // Add your logic here to handle the guess button click event
-    guess(-1);
+    guess();
   };
 
   return (
-    <Button onClick={handleClick} disabled={counterVal === 0}>
-      Guess
+    <Button
+      onClick={handleClick}
+      disabled={pending || credits < 3 || textData === ""}
+    >
+      {pending ? (
+        <span className="loading loading-spinner loading-xs"></span>
+      ) : (
+        "Guess"
+      )}
     </Button>
   );
 };

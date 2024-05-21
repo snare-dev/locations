@@ -1,8 +1,12 @@
-import React from "react";
+
+import { Link } from "react-router-dom";
 
 const Leaderboard = () => {
+  //api call to get all users by ranking
+  let id;
+
   return (
-    <div className="drawer md:drawer-open">
+    <div className="drawer md:drawer-open h-full">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-side">
         <label
@@ -15,11 +19,7 @@ const Leaderboard = () => {
             LEADERBOARD
           </div>
           <li>
-            <a
-              href="
-            "
-              className="flex items-start"
-            >
+            <Link to={`/profile/:${id}`} className="flex items-start">
               <img
                 src=""
                 alt="user image"
@@ -29,14 +29,10 @@ const Leaderboard = () => {
                 <h2 className="font-medium">User 1</h2>
                 <p className="text-sm text-slate-300">wins: 400</p>
               </div>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="
-            "
-              className="flex items-start"
-            >
+            <Link to={`/profile/:${id}`} className="flex items-start">
               <img
                 src=""
                 alt="user image"
@@ -46,7 +42,7 @@ const Leaderboard = () => {
                 <h2 className="font-medium">User 2</h2>
                 <p className="text-sm text-slate-300">wins: 360</p>
               </div>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
