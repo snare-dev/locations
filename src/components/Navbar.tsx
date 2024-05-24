@@ -8,9 +8,13 @@ import ShareModal from "./ShareModal";
 
 const Navbar = () => {
 
-  const handleShare = () => {
-    document.getElementById("share-modal").showModal();
+  const handleShare = async () => {
+    const modal = document.getElementById("share-modal") as HTMLDialogElement;
+    // Show the modal
+    modal.showModal();
   };
+
+
 
   return (
     <div className="drawer">

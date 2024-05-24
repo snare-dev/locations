@@ -4,7 +4,6 @@ import { MdRssFeed } from "react-icons/md";
 import { BiSolidPlaneAlt } from "react-icons/bi";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IoSettingsSharp } from "react-icons/io5";
-import { GrLogout } from "react-icons/gr";
 import { IoPeopleSharp } from "react-icons/io5";
 
 const links = [
@@ -29,17 +28,21 @@ const links = [
     path: "/settings",
     icon: <IoSettingsSharp className="mr-2" />,
   },
-  { name: "Logout", path: "/logout", icon: <GrLogout className="mr-2" /> },
 ];
 
 const NavLinks = () => {
   return (
-      <div className="my-4">
-          <li>
-        {links.map((link) => <Link to={link.path}>{link.icon}{link.name}</Link>)}
-          </li>
+    <div className="mt-4 mb-2">
+      <li>
+        {links.map((link) => (
+          <Link to={link.path}>
+            {link.icon}
+            {link.name}
+          </Link>
+        ))}
+      </li>
     </div>
-  )
-}
+  );
+};
 
-export default NavLinks
+export default NavLinks;

@@ -1,56 +1,94 @@
 // import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import SinglePost from "./SinglePost";
-// import { getPosts } from "@/services/apiCalls";
+import { getPosts } from "@/services/apiCalls";
 
-const data = [
-  {
-    id: "ajfjdf",
-    userName: "amani",
-    userImg: "XXXXXXXXXXXXXX",
-    address: "0x1234567890",
-    winner: false,
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-  },
-  {
-    id: "jdnso",
-    userName: "xnaire",
-    userImg: "XXXXXXXXXXXXXX",
-    address: "0x1234567890",
-    winner: false,
+import { Post } from "@/types";
+import { useState } from "react";
+import LoadingSipnner from "./LoadingSipnner";
+import ErrorMessage from "./ErrorMessage";
 
-  },
-  {
-    id: "ajfksnidnijdf",
-    userName: "blaq-idea",
-    userImg: "XXXXXXXXXXXXXX",
-    address: "0x1234567890",
-    winner: false,
+type dataProps = {
+  latitude: number | undefined;
+  longitude: number | undefined;
+  country: string | undefined;
+};
 
-  },
-  
-];
+const Feed = ({ latitude, longitude, country }: dataProps) => {
+  const [radius, setRadius] = useState<number>(10);
+  const coords = {
+    latitude,
+    longitude,
+    country,
+  };
 
-const Feed = () => {
-  //usestate for initial data
-  // const [feedData, setFeedData] = useState();
+  const { data, isLoading, error, isError } = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => getPosts(coords, radius),
+    // initialData: data,
+  });
 
-  //useeffect for realtime data
+  const handleChange = (value: string) => {
+    switch (value) {
+      case "20":
+        setRadius(20);
+        break;
+      case "50":
+        setRadius(50);
+        break;
+      case "100":
+        setRadius(100);
+        break;
+      default:
+        setRadius(10);
+    }
+  };
 
-  // useEffect(() => {
-  //   const data = getPosts();
-  //   //setFeedData(data);
-  //   setFeedData(data);
-  // }, []);
+  let content;
 
-  return (
-    <div className="mx-auto p-4">
+  if (isLoading) {
+    content = <LoadingSipnner />;
+  }
+  if (isError) {
+    content = <ErrorMessage message={error.message} />;
+  }
+
+  if (data) {
+    const locations = data.locations as Post[];
+    content = (
       <ul>
-        {data.map((post) => (
+        {locations.map((post: Post) => (
           <li key={post.id}>
             <SinglePost post={post} />
           </li>
         ))}
       </ul>
+    );
+  }
+
+  return (
+    <div className="flex flex-col mx-auto p-4">
+      <div className="flex justify-end py-2">
+        <Select onValueChange={(val: string) => handleChange(val)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Radius(miles)" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="20">20</SelectItem>
+            <SelectItem value="50">50</SelectItem>
+            <SelectItem value="100">100</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      {content}
     </div>
   );
 };

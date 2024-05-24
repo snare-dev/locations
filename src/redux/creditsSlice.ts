@@ -25,4 +25,4 @@ const creditsSlice = createSlice({
 
 export const creditsActions = creditsSlice.actions;
 
-export default creditsSlice;
+export default creditsSlice.reducer;

@@ -5,14 +5,15 @@ import { useQuery } from "@tanstack/react-query";
 import { searchUser } from "@/services/apiCalls";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSipnner from "./LoadingSipnner";
+import { userType } from "@/types";
 
 const SearchField = () => {
-  const [search, setSearch] = useState<string | undefined>();
+  const [searchValue, setSearch] = useState<string | undefined>();
 
   const { data, isError, error, isLoading } = useQuery({
-    queryKey: ["search"],
-    queryFn: () => searchUser(search),
-    enabled: search !== undefined,
+    queryKey: ["search", searchValue],
+    queryFn: () => searchUser(searchValue),
+    enabled: searchValue !== undefined,
   });
 
   let content;
@@ -26,7 +27,7 @@ const SearchField = () => {
   }
 
   if (data) {
-    content = data?.map((user) => <li key={user.id}>{user.name}</li>);
+    content = data?.map((user: userType) => <li key={user.id}>{user.userName}</li>);
   }
 
   return (
@@ -43,7 +44,7 @@ const SearchField = () => {
           className="rounded-md bg-background pl-8"
           onChange={(e) => setSearch(e.target.value)}
         />
-        {search && (
+        {searchValue && (
           <ul className="dropdown-content z-[1] divide-y drop-shadow-lg mt-2.5 menu p-2 shadow bg-base-100 rounded-b-md w-full">
             {content}
           </ul>

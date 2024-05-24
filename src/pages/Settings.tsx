@@ -1,8 +1,11 @@
-import React from 'react'
+import DeleteProfile from '@/components/DeleteProfile';
+
 
 const Settings = () => {
   return (
-    <div>Settings</div>
+    <div>
+      <DeleteProfile />
+    </div>
   )
 }
 

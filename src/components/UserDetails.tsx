@@ -5,7 +5,7 @@ type userProps = {
   userName: string;
   userImg: string;
   address: string;
-  winner: boolean;
+  winner: string;
 };
 
 

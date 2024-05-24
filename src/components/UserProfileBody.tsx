@@ -38,6 +38,8 @@ const images = [
   },
 ];
 
+//not images but locations
+
 const UserProfileBody = () => {
   return (
     <div className="flex flex-col w-full">
@@ -50,7 +52,7 @@ const UserProfileBody = () => {
         <div className="grid grid-cols-3 gap-4">
           {/* Images */}
           {images.map((image) => (
-            <Link to={`/profile/:${image.userId}/:${image.id}`}>
+            <Link to={`/locations/:${image.id}`}>
               <img
                 key={image.id}
                 src={image.src}

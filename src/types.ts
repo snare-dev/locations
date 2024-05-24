@@ -28,3 +28,44 @@ export type creditsSliceType = {
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 export const useAppSelector = useSelector.withTypes<RootState>();
+
+
+export type Post = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  winner: string;
+  totalGuesses: number;
+  address: string;
+  creatorId: string;
+  creatorImg: string;
+  creatorName: string;
+};
+
+export type createPostType = {
+  name: string | undefined;
+  description: string | undefined;
+  image: string | undefined;
+  address: string | undefined;
+  country: string | undefined;
+  locationData: [] | undefined[];
+  creatorId: string | undefined;
+  creatorImg: string | undefined;
+  creatorName: string | undefined;
+};
+
+
+export type userType = {
+  id: string;
+  userName: string;
+  userImg: string;
+  address: string;
+  country: string;
+  rank: number;
+  places: object[];
+  credits: number;
+  followers: number;
+  bio: string;
+  correctGuesses: number
+};

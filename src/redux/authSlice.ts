@@ -1,10 +1,10 @@
+import { userType } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
-// import { getUser } from "@/services/apiCalls";
-
-export type authType = {
-    isAuthenticated: boolean;
-    user: string;
+ type stateType = {
+  isAuthenticated: boolean;
+   user: userType | undefined;
 }
 
 
@@ -12,23 +12,23 @@ const initialState = {
     isAuthenticated: false,
     user: undefined,
 }
-
+// Define the reducers
 const authSlice = createSlice({
-    name: "authentication",
-    initialState,
-    reducers: {
-        login:  (state) => {
-            //fetch userData
-            // const user =await getUser();
-            state.isAuthenticated = true;
-            // state.user = user;
-        },
-        logout: (state) => {
-            state.isAuthenticated = false;
-        }
-    }
-})
+  name: "authentication",
+  initialState,
+  reducers: {
+    login: (state: stateType, action: PayloadAction<userType>) => {
+      //fetch userData
+      state.isAuthenticated = true;
+      state.user = action.payload;
+    },
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.user = undefined;
+    },
+  },
+});
 
 export const authActions = authSlice.actions;
 
-export default authSlice;
+export default authSlice.reducer;

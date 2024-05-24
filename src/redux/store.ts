@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./authSlice";
 import creditsSlice from "./creditsSlice";
+import locationSlice from "./locationSlice";
 
 const store = configureStore({
   reducer: {
-    creditCount: creditsSlice.reducer,
-    auth: authSlice.reducer,
+    creditCount: creditsSlice,
+    auth: authSlice,
+    location: locationSlice,
   },
 });
 
