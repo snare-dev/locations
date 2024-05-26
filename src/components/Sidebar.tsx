@@ -15,7 +15,7 @@ const Sidebar = () => {
   const watchID = useAppSelector((state) => state.location.watchID);
   const dispatch = useAppDispatch();
 
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["logout"],
     queryFn: logOutUser,
     enabled: initiateLogout, // Disable the query from running automatically
@@ -34,7 +34,7 @@ const Sidebar = () => {
     toast.error(error.message || "Error logging out");
   }
 
-  if (data.message) {
+  if (data) {
     toast.success("Logged out successfully");
   }
 
@@ -51,7 +51,7 @@ const Sidebar = () => {
           <NavLinks />
           {/* logout */}
           <li className="flex">
-            {isPending ? (
+            {isLoading ? (
               <LoadingSipnner />
             ) : (
               <button onClick={handleLogout}>

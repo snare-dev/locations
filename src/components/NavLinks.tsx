@@ -35,7 +35,7 @@ const NavLinks = () => {
     <div className="mt-4 mb-2">
       <li>
         {links.map((link) => (
-          <Link to={link.path}>
+          <Link to={link.path} key={link.name} >
             {link.icon}
             {link.name}
           </Link>

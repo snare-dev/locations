@@ -5,7 +5,7 @@ import { IoLocationSharp } from "react-icons/io5";
 import ErrorMessage from "./ErrorMessage";
 import LoadingSipnner from "./LoadingSipnner";
 import { createPost } from "@/services/apiCalls";
-import { useAppSelector } from "@/types";
+import { createPostType, Post, useAppSelector } from "@/types";
 import { Input } from "./ui/input";
 import { FormEvent } from "react";
 
@@ -29,7 +29,7 @@ const ShareModal = () => {
 
     //
     // get the form data
-    const postData = {
+    const postData: createPostType = {
       name: formData.get("name"),
       description: formData.get("description"),
       image: formData.get("image"),

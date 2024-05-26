@@ -65,7 +65,18 @@ export type userType = {
   rank: number;
   places: object[];
   credits: number;
-  followers: number;
+  followers: [];
   bio: string;
-  correctGuesses: number
+  challenges: [];
+  correctGuesses: number;
 };
+
+export type challenge = {
+  title: string;
+  description: string;
+  prize: number;
+  staked: boolean;
+  participants: string[];
+  startDate: string;
+  endDate: string;
+}

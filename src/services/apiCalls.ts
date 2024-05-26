@@ -1,31 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import axios from "axios";
+
 import { createPostType, userType } from "@/types";
 
 export const loginUser = async () => {
-  const googleUrl = "http//:localhost:8000/api/v1/auth/google";
+  const googleUrl = "/api/v1/auth/google";
 
   try {
     const response = await fetch(googleUrl);
 
     console.log(response);
 
-    if (!response.ok) {
+    if (!response) {
       throw new Error("User not found, please try again!");
     }
 
-    const user = await response.json();
+    const user: userType = await response.json();
 
     console.log(user);
 
-
-    return user;
-  } catch (error) {
+    return { user: user };
+  } catch (error: any) {
     console.log(error);
-    return error;
+    return { message: error?.message };
   }
 };
 
 export const logout = async () => {
-  const logoutUrl = "http//:localhost:8000/api/v1/auth/logout";
+  const logoutUrl = "/api/v1/auth/logout";
 
   try {
     const response = await fetch(logoutUrl);
@@ -37,33 +39,40 @@ export const logout = async () => {
     const res = response.json();
 
     return res;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return error;
+    return { message: error.message };
   }
 };
 
 export const getUserProfile = async (id: string) => {
-  const url = `http//:localhost:8080/api/v1/users/${id}`;
+  const url = `/api/v1/users/${id}`;
 
   try {
     const response = await fetch(url);
+
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`Couldn't find user profile, sorry!`);
     }
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching data:", error);
   }
 };
 
-export const getLocationName = async (id: string) => {
-  const url = "http//:localhost:8000/api/v1/locations/";
+export const setWinner = async (userId: string, locationId: string) => {
+  const url = `/api/v1/locations/${locationId}`;
 
   try {
-    const res = await fetch(`${url}/:${id}`);
+    const res = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
 
     const data = await res.json();
 
@@ -81,47 +90,57 @@ export const getPosts = async (
   },
   radius: number
 ) => {
-  const { latitude, longitude } = coords;
-  // Use the latitude and longitude to fetch data
+  const { latitude, longitude, country } = coords;
+  let url = `/api/v1/locations/`;
+  // Check if latitude, longitude, and country are provided
+  if (!latitude || !longitude || !country) {
+    url += `?radius=${radius}`;
+  }
+
+  if (latitude && longitude && country) {
+    url += `?latitude=${latitude}&longitude=${longitude}&radius=${radius}&country=${country}`;
+  }
 
   try {
-    const res = await fetch(
-      `http://localhost:8000/api/v1/locations/?latitude=${latitude}&longitude=${longitude}&radius=${radius}&country={country}`
-    );
+    const res = await fetch(url);
+
     if (!res.ok) {
       console.log(res);
-      throw new Error(`HTTP error! Status: ${res.status} `);
+      throw new Error(`Couldn't fetch posts, please, try again later!`);
     }
+
     const data = await res.json();
+
     console.log(data);
+    // Return the data
     return data;
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
-    return error;
+    return {message: error.message};
   }
 };
 
 export const searchUser = async (query: string | undefined) => {
-  let url = `http//:localhost:8080/api/v1/users/`;
+  let url = `/api/v1/users/`;
 
   if (query) {
     url += `?search=${query}`;
-    try {
-      const res = await fetch(url);
-
-      if (!res.ok) {
-        throw new Error(`Something went wrong, please try again!`);
-      }
-
-      const data = await res.json();
-
-      return data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return error;
-    }
   } else {
     return;
+  }
+  try {
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(`Something went wrong, please try again!`);
+    }
+
+    const data = await res.json();
+
+    return data;
+  } catch (error: any) {
+    console.error("Error fetching data:", error);
+    return {message: error.message};
   }
 };
 
@@ -143,9 +162,9 @@ export const createPost = async (data: createPostType) => {
 
     const postData = await response.json();
     return postData;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return error;
+    return {message: error.message};
   }
 };
 
@@ -163,42 +182,31 @@ export const deleteProfile = async (id: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return error;
+    return {message: error.message};
   }
 };
 
-export const getAddress = async () => {
-  let url;
-  let longitude;
-  let latitude;
+export const getAddressData = async (latitude: number, longitude: number) => {
+  const url = `/api/v1/locations/address?latitude=${latitude}&longitude=${longitude}`;
 
   try {
-    const watchID = navigator.geolocation.watchPosition((position) => {
-      // Use the position coordinates to fetch data
-      longitude = position.coords.longitude;
-      latitude = position.coords.latitude;
-    });
-
-    if (!longitude || !latitude) {
-      throw new Error(
-        "Unable to get location data, please allow location data to share this location!"
-      );
-    }
-
-    url = `http//:localhost:8080/api/v1/locations/address?latitude=${latitude}&longitude=${longitude}`;
     const response = await fetch(url);
 
+    console.log(response);
+
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`Something went wrong! Couldn't get location data!`);
     }
 
-    const address = await response?.json();
+    const data = await response?.json();
 
-    return { address, watchID, latitude, longitude };
-  } catch (error) {
+    const { address, country } = data;
+
+    return { address, latitude, longitude, country };
+  } catch (error: any) {
     console.error(error);
-    return error;
+    return { message: error.message };
   }
 };
